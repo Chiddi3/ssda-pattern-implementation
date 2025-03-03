@@ -1,4 +1,64 @@
+// Existing VideoPlug interface
 public interface VideoPlug {
-
-	public display(int width, int height);
+    public display(int width, int height);
 }
+
+// Existing VGAPhig class implementing VideoPlug
+class VGAPhig implements VideoPlug {
+    public display(int width, int height) {
+        // VGA-specific display logic
+        print("Displaying using VGAPhig with width " + width + " and height " + height);
+    }
+}
+
+// Existing HOMPhig class with a different method name
+class HOMPhig {
+    public distribution(int width, int height) {
+        // HOM-specific distribution logic
+        print("Distributing using HOMPhig with width " + width + " and height " + height);
+    }
+}
+
+// Adapter class to make HOMPhig compatible with VideoPlug interface
+class HOMPhigAdapter implements VideoPlug {
+    private HOMPhig homPhig;
+
+    constructor(HOMPhig homPhig) {
+        this.homPhig = homPhig;
+    }
+
+    public display(int width, int height) {
+        // Adapt the distribution method to the display method
+        this.homPhig.distribution(width, height);
+    }
+}
+
+// VideoSocket class that uses VideoPlug interface
+class VideoSocket {
+    private VideoPlug videoPlug;
+
+    constructor(VideoPlug videoPlug) {
+        this.videoPlug = videoPlug;
+    }
+
+    public displayContent(int width, int height) {
+        this.videoPlug.display(width, height);
+    }
+}
+
+// Usage example
+function main() {
+    // Create an instance of HOMPhig
+    HOMPhig homPhig = new HOMPhig();
+
+    // Create an adapter for HOMPhig
+    HOMPhigAdapter homPhigAdapter = new HOMPhigAdapter(homPhig);
+
+    // Create VideoSocket with the adapter
+    VideoSocket videoSocket = new VideoSocket(homPhigAdapter);
+
+    // Display content using HOMPhig's distribution method
+    videoSocket.displayContent(1920, 1080);
+}
+
+/** CHANGE: Applied Adapter Pattern to allow VideoSocket to use HOMPhig's distribution method **/
